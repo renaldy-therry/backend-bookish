@@ -1,4 +1,3 @@
-const admin = require('../config/firebase-config');
 const {OAuth2Client} = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const client = new OAuth2Client();

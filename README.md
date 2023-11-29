@@ -12,4 +12,4 @@ Kelompok 7 Manajemen Proyek A081
 
 ERD
 
-![ERD](Bookish%20Database.png")
+![ERD](Bookish%20Database.png)
