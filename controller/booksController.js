@@ -1,4 +1,5 @@
 const { Book } = require('../models');
+const cloudinary = require('cloudinary').v2;
 
 // Create a new book
 exports.createBook = async (req, res) => {
