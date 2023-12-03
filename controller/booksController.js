@@ -38,7 +38,7 @@ exports.getBookById = async (req, res) => {
 // get a book by isbn
 exports.getBookByIsbn = async (req, res) => {
   try {
-    const book = await Book.findOne({ where: { isbn: req.query.isbn } });
+    const book = await Book.findOne({ where: { isbn: req.params.isbn } });
     if (book) {
       res.json(book);
     } else {

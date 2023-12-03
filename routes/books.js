@@ -8,7 +8,7 @@ router.post('/', booksController.createBook);
 // Get all books
 router.get('/', booksController.getAllBooks);
 
-router.get('/isbn', booksController.getBookByIsbn);
+router.get('/isbn/:isbn', booksController.getBookByIsbn);
 
 // Get a single book by ID
 router.get('/:id', booksController.getBookById);
