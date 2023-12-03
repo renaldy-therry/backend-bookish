@@ -2,24 +2,42 @@
 const { faker } = require('@faker-js/faker');
 
 /** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    const books = [];
-    for (let i = 0; i < 10; i++) {
-      const Stock = Math.floor(Math.random() * 21); 
-      books.push({
-        title: faker.lorem.words(3),
+  up: async (queryInterface, Sequelize) => {
+    const Stock = Math.floor(Math.random() * 21); 
+    return queryInterface.bulkInsert('Books', [
+      {
+        title: 'Physics I For Dummies',
+        isbn: '9781119872221',
         stock: Stock,
-        available: Stock > 0,  // Randomly assign true or false
-        description: faker.lorem.paragraph(),
-        author: faker.person.fullName()
-      });
-    }
-    await queryInterface.bulkInsert('Books', books, {});
+        publisher: 'For Dummies',
+        image: 'https://res.cloudinary.com/dv1ub4ivc/image/upload/v1701572554/bookish/ibjkwueoelq8nlin5sdj.jpg',
+        available: Stock > 0,
+        description: 'physics for dummies 3rd edition',
+        author: 'Steven Holzner',
+        releasedate: '2022-03-29',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        title: 'Atomic Habits: An Easy and Proven Way to Build Good Habits and Break Bad Ones',
+        isbn: '9781847941848',
+        stock: Stock,
+        publisher: 'Random House Business Books',
+        image: 'https://res.cloudinary.com/dv1ub4ivc/image/upload/v1701574549/bookish/y1ughootapjbskteuesl.jpg',
+        available: Stock > 0,
+        description: 'A supremely practical and useful book. James Clear distils the most fundamental information about habit formation, so you can accomplish more by focusing on less.',
+        author: 'James Clear',
+        releasedate: '2018-10-16',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      // Add more books as needed
+    ]);
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Books', null, {});
+  down: async (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('Books', null, {});
   }
 };
-
