@@ -35,6 +35,20 @@ exports.getBookById = async (req, res) => {
   }
 };
 
+// get a book by isbn
+exports.getBookByIsbn = async (req, res) => {
+  try {
+    const book = await Book.findOne({ where: { isbn: req.query.isbn } });
+    if (book) {
+      res.json(book);
+    } else {
+      res.status(404).json({ error: 'Book not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Update a book by ID
 exports.updateBook = async (req, res) => {
   try {
