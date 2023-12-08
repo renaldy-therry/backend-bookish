@@ -61,11 +61,11 @@ exports.createBorrowBook = async (req, res) => {
           res.status(400).json({ error: 'Book is out of stock' });
         }
       } else {
-        res.status(400).json({ error: 'User has already borrowed one or more of the specified books' });
+        res.status(400).json({ error: 'User has already borrowed  books' });
       }
     } else {
       // If the user has exceeded the maximum limit of borrowing different books, handle this scenario
-      res.status(400).json({ error: 'User has exceeded the maximum limit of borrowing different books' });
+      res.status(400).json({ error: 'User has exceeded the maximum limit of borrowing books' });
     }
   } catch (error) {
     // Rollback the transaction if an error occurs
