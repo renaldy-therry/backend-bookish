@@ -89,15 +89,15 @@ exports.createBorrowBook = async (req, res) => {
       });
       
       // convert object borrowBooks to array of object 
-      const formattedBorrowBooks = borrowBooks.map(borrowBook => {
-        const { Book, ...borrowBookList } = borrowBook.get();
-        return {
-          ...borrowBookList,
-          books: [Book]
-        };
-      });
+      // const formattedBorrowBooks = borrowBooks.map(borrowBook => {
+      //   const { Book, ...borrowBookList } = borrowBook.get();
+      //   return {
+      //     ...borrowBookList,
+      //     books: [Book]
+      //   };
+      // });
   
-      res.json(formattedBorrowBooks);
+      res.json(borrowBooks);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: error.message });
