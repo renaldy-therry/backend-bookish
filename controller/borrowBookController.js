@@ -35,24 +35,20 @@ exports.createBorrowBook = async (req, res) => {
         const books = await Book.findAll({ where: { id: req.body.book_id }, transaction });
 
         // Check if the number of found books matches the number of requested book ids
-        if (!books || books.length !== req.body.book_id.length) {
-          return res.status(404).json({ error: 'One or more books not found' });
+        if (!books) {
+          return res.status(404).json({ error: 'Book not found' });
         }
 
         // Verify if the stock of all books is greater than 0
         const allBooksInStock = books.every((book) => book.stock > 0);
         if (allBooksInStock) {
           // Create the borrow books
-          const borrowBooks = await Promise.all(
-            req.body.book_id.map((book_id) => {
-              return borrow_book.create({
+          const borrowBooks = await borrow_book.create({
                 user_id: req.body.user_id,
-                book_id: book_id,
+                book_id: req.body.book_id,
                 status: 'borrowed',
                 deadline_at: req.body.deadline_at
               }, { transaction });
-            })
-          );
 
           // Decrement the stock of all books by 1
           await Book.decrement('stock', { by: 1, where: { id: req.body.book_id }, transaction });
@@ -62,7 +58,7 @@ exports.createBorrowBook = async (req, res) => {
 
           res.status(201).json(borrowBooks);
         } else {
-          res.status(400).json({ error: 'One or more books are out of stock' });
+          res.status(400).json({ error: 'Book is out of stock' });
         }
       } else {
         res.status(400).json({ error: 'User has already borrowed one or more of the specified books' });
