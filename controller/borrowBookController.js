@@ -75,24 +75,54 @@ exports.createBorrowBook = async (req, res) => {
 };
 
   // Get all books
+
   exports.getAllBorrowBooks = async (req, res) => {
     try {
-        const borrowBooks = await borrow_book.findAll({
-            include: [{
-                model: User,
-                required: true, 
-            }, {
-                model: Book,
-                required: true, 
-            }]
-        });
-        
-        res.json(borrowBooks);
+      const borrowBooks = await borrow_book.findAll({
+        include: [{
+          model: User,
+          required: true, 
+        }, {
+          model: Book,
+          required: true, 
+        }]
+      });
+      
+      // convert object borrowBooks to array of object 
+      const formattedBorrowBooks = borrowBooks.map(borrowBook => {
+        const { Book, ...borrowBookList } = borrowBook.get();
+        return {
+          ...borrowBookList,
+          books: [Book]
+        };
+      });
+  
+      res.json(formattedBorrowBooks);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: error.message });
+      console.log(error);
+      res.status(500).json({ error: error.message });
     }
-};
+  };
+  
+  
+//   exports.getAllBorrowBooks = async (req, res) => {
+//     try {
+//         const borrowBooks = await borrow_book.findAll({
+//             include: [{
+//                 model: User,
+//                 required: true, 
+//             }, {
+//                 model: Book,
+//                 required: true, 
+//             }]
+//         });
+        
+//         res.json(borrowBooks);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 
   
   // Get a single book by ID
