@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const returnController = require('../controller/returnBookController');
+const imageControl = require('../src/middleware/image');
 
 // Create a new book
-router.post('/', returnController.createReturnBook);
+router.post('/', imageControl.uploadFile, returnController.createReturnBook);
 
 // Get all books
 router.get('/', returnController.getAllReturnBooks);

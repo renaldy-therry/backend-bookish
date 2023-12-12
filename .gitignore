@@ -2,4 +2,4 @@ client
 node_modules
 tes.txt
 controller/tes.html
-config/cloudinary.js
+config/getImage.js

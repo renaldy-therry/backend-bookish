@@ -24,13 +24,20 @@ exports.createReturnBook = async (req, res) => {
     const lateTime = Math.max(Math.ceil((currentDate - deadlineDate) / (1000 * 60 * 60 * 24)), 0);
 
     // Calculate the charge
-    const charge = lateTime * 1000;
+    const charge = (lateTime * 1000) - 1000;
+
+      // Check if file was uploaded
+    const { file } = req;
+    if (!file) {
+      return res.status(400).send({ error: 'No file uploaded.' });
+    }
 
     // Create the return_book entry including the calculated late time
     const returnBook = await return_book.create({
       ...req.body,
       late_time: lateTime,
-      charge: charge
+      charge: charge,
+      proof_image: file.path  // Save the URL of the uploaded file
     }, { transaction });
 
     // Increment the stock of the associated book by 1

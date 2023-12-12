@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     returned_at: DataTypes.DATE,
     user_id: DataTypes.INTEGER,
     book_id: DataTypes.INTEGER,
-    borrow_id: DataTypes.INTEGER
+    borrow_id: DataTypes.INTEGER,
+    proof_image: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'return_book',

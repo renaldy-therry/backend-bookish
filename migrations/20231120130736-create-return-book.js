@@ -45,6 +45,10 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
+      proof_image: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATEONLY
