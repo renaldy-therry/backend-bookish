@@ -9,7 +9,30 @@ const sequelize = new Sequelize('book_borrow_dev', 'postgres', '12345', {
 exports.createReturnBook = async (req, res) => {
   let transaction;
   try {
-    transaction = await sequelize.transaction();
+    const { user_id, book_id, borrow_id, returned_at } = req.body;
+
+    // Validate required fields
+    if (!user_id || !book_id || !borrow_id || !returned_at) {
+      return res.status(400).json({ error: 'User ID, Book ID, Borrow ID and Return Date are required.' });
+    }
+
+    // Validate user_id, book_id, and borrow_id
+    if (!(Number.isInteger(user_id) || (typeof user_id === 'string' && Number.isInteger(Number(user_id))))) {
+      return res.status(400).json({ error: 'User ID must be an integer or a string that can be converted to an integer.' });
+    }
+
+    if (!(Number.isInteger(book_id) || (typeof book_id === 'string' && Number.isInteger(Number(book_id))))) {
+      return res.status(400).json({ error: 'Book ID must be an integer or a string that can be converted to an integer.' });
+    }
+
+    if (!(Number.isInteger(borrow_id) || (typeof borrow_id === 'string' && Number.isInteger(Number(borrow_id))))) {
+      return res.status(400).json({ error: 'Borrow ID must be an integer or a string that can be converted to an integer.' });
+    }
+
+    // Validate returned_at
+    if (isNaN(Date.parse(returned_at))) {
+      return res.status(400).json({ error: 'Invalid return date.' });
+    }
 
     // Find the borrow_book entry to check if the return_book can be created
     const borrowBook = await borrow_book.findOne({ where: { id: req.body.borrow_id } });
@@ -17,6 +40,8 @@ exports.createReturnBook = async (req, res) => {
     if (!borrowBook) {
       return res.status(400).json({ error: 'Corresponding borrow_book entry not found. Unable to create return_book.' });
     }
+
+    transaction = await sequelize.transaction();
 
     // Calculate the late time in days
     const deadlineDate = new Date(borrowBook.deadline_at);
