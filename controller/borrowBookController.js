@@ -9,6 +9,35 @@ const sequelize = new Sequelize('book_borrow_dev', 'postgres', '12345', {
 exports.createBorrowBook = async (req, res) => {
   let transaction;
   try {
+    const { user_id, book_id, deadline_at } = req.body;
+
+    // Validate required fields
+    if (!user_id || !book_id || !deadline_at) {
+      return res.status(400).json({ error: 'User ID, Book ID and Deadline date are required.' });
+    }
+
+    // Validate user_id and book_id
+    if (!Number.isInteger(user_id) || !Number.isInteger(book_id)) {
+      return res.status(400).json({ error: 'User ID and Book ID must be integers.' });
+    }
+
+    // Validate deadline_at
+    if (isNaN(Date.parse(deadline_at))) {
+      return res.status(400).json({ error: 'Invalid deadline date.' });
+    }
+
+    // Check if the user exists
+    const user = await User.findOne({ where: { id: user_id } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // Check if the book exists
+    const book = await Book.findOne({ where: { id: book_id } });
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found.' });
+    }
+
     transaction = await sequelize.transaction();
 
     // Retrieve the number of different books borrowed by the user

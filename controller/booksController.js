@@ -1,15 +1,49 @@
 const { Book } = require('../models');
 const cloudinary = require('cloudinary').v2;
 
-// Create a new book
+
+
 exports.createBook = async (req, res) => {
   try {
-    // Check if the stock is more than 0. If so, set available to true, otherwise set it to false.
-    const available = req.body.stock > 0 ? true : false;
+    const { title, isbn, stock, publisher, image, description, author, releasedate } = req.body;
+
+    // Validate required fields
+    if (!title || !isbn || !publisher || !author) {
+      return res.status(400).json({ error: 'Title, ISBN, publisher, and author are required.' });
+    }
+
+    if (typeof title !== 'string') {
+      return res.status(400).json({ error: 'Title must be a string' });
+    }
+
+    // Validate ISBN
+    if (typeof isbn !== 'string' || isbn.length > 17) {
+      return res.status(400).json({ error: 'ISBN must be a string of maximum 17 characters.' });
+    }
+
+    // Validate stock
+    if (typeof stock !== 'number' || stock < 0) {
+      return res.status(400).json({ error: 'Stock must be a non-negative number.' });
+    }
+
+    // Validate release date
+    if (releasedate && isNaN(Date.parse(releasedate))) {
+      return res.status(400).json({ error: 'Invalid release date.' });
+    }
+
+    // If stock is more than 0, set available to true, otherwise set it to false.
+    const available = stock > 0;
 
     const book = await Book.create({
-      ...req.body,
-      available: available
+      title,
+      isbn,
+      stock,
+      publisher,
+      image,
+      description,
+      author,
+      releasedate,
+      available
     });
 
     res.status(201).json(book);
@@ -17,6 +51,7 @@ exports.createBook = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 
 // Get all books

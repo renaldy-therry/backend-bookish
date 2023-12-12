@@ -5,7 +5,7 @@ const cloudinary = require('../../config/cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'some_folder_name',
+    folder: 'bookish',
     format: async (req, file) => 'png',
   },
 });
