@@ -33,6 +33,19 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      {
+        title: 'Eloquent JavaScript, 3rd Edition: A Modern Introduction to Programming',
+        isbn: '9781593279509',
+        stock: Stock,
+        publisher: 'No Starch Press',
+        image: 'https://res.cloudinary.com/dv1ub4ivc/image/upload/v1702729807/bookish/n2v3dywo2rraphytvu2y.jpg',
+        available: Stock > 0,
+        description: 'javascript book for people.',
+        author: 'Marijn Haverbeke',
+        releasedate: '2018-12-04',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
       // Add more books as needed
     ]);
   },
