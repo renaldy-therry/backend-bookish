@@ -89,12 +89,15 @@ exports.createReturnBook = async (req, res) => {
   }
 };
 
-
-
 // Get all return_books
 exports.getAllReturnBooks = async (req, res) => {
   try {
-    const returnBooks = await return_book.findAll();
+    const returnBooks = await return_book.findAll({
+      include: [{
+        model: Book,
+        as: 'Book',
+      }]
+    });
     res.json(returnBooks);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -104,7 +107,12 @@ exports.getAllReturnBooks = async (req, res) => {
 // Get a single return_book by ID
 exports.getReturnBookById = async (req, res) => {
   try {
-    const returnBook = await return_book.findByPk(req.params.id);
+    const returnBook = await return_book.findByPk(req.params.id, {
+      include: [{
+        model: Book,
+        as: 'Book',
+      }]
+    });
     if (returnBook) {
       res.json(returnBook);
     } else {
